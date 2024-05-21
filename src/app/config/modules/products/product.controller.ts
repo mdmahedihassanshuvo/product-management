@@ -109,7 +109,21 @@ const createOrder = async (req: Request, res: Response) => {
 
 const getAllOrders = async (req: Request, res: Response) => {
   try {
-    const result = await productService.getAllProductFromDB();
+    const result = await productService.getAllOrdersFromDB();
+    res.status(200).json({
+      success: true,
+      message: "Retrieved all orders successfully",
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getOrderByEmail = async (req: Request, res: Response) => {
+  try {
+    const email = req.query?.email;
+    const result = await productService.getOrderByEmailFromDB(email);
     res.status(200).json({
       success: true,
       message: "Retrieved all orders successfully",
@@ -129,4 +143,5 @@ export const productController = {
   getProductByUsingName,
   createOrder,
   getAllOrders,
+  getOrderByEmail,
 };

@@ -11,6 +11,7 @@ router.delete("/products/:productId", productController.deleteOneProduct);
 router.get("/products/search", productController.getProductByUsingName);
 
 router.post("/orders", productController.createOrder);
-router.get("/v1/allOrders", productController.getAllOrders);
+router.get("/v1/orders", productController.getAllOrders);
+router.get("/v1/orders/search", productController.getOrderByEmail);
 
 export const productRouter = router;
