@@ -16,12 +16,21 @@ const getOneProductFromDB = async (id: string) => {
   return result;
 };
 
-const updateProductFromDB = async (
-  id: string,
-  productData: Product
-) => {
+const updateProductFromDB = async (id: string, productData: Product) => {
   const result = await ProductModel.findOneAndUpdate({ id }, productData, {
     new: true,
+  });
+  return result;
+};
+
+const deleteOneProductFromDB = async (id: string) => {
+  const result = await ProductModel.deleteOne({ id });
+  return result;
+};
+
+const getProductsByUsingNameIntoDB = async (productName: string) => {
+  const result = await ProductModel.find({
+    name: { $regex: productName, $options: "i" },
   });
   return result;
 };
@@ -31,4 +40,6 @@ export const productService = {
   getAllProductFromDB,
   getOneProductFromDB,
   updateProductFromDB,
+  deleteOneProductFromDB,
+  getProductsByUsingNameIntoDB,
 };

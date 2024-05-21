@@ -62,9 +62,44 @@ const updateProduct = async (req: Request, res: Response) => {
   }
 };
 
+const deleteOneProduct = async (req: Request, res: Response) => {
+  try {
+    const { productId } = req.params;
+    const result = await productService.deleteOneProductFromDB(productId);
+    res.status(200).json({
+      success: true,
+      message: "delete product successfully",
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getProductByUsingName = async (req: Request, res: Response) => {
+  try {
+    const searchTerm = req?.query?.searchTerm as string;
+    console.log(searchTerm);
+    const result = await productService.getProductsByUsingNameIntoDB(
+      searchTerm
+    );
+    res.status(200).json({
+      success: true,
+      message: "Retrieved all product successfully",
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+
 export const productController = {
   createProduct,
   getAllProducts,
   getOneProductFromDB,
   updateProduct,
+  deleteOneProduct,
+  getProductByUsingName,
 };
