@@ -93,7 +93,32 @@ const getProductByUsingName = async (req: Request, res: Response) => {
   }
 };
 
+const createOrder = async (req: Request, res: Response) => {
+  try {
+    const order = req.body;
+    const result = await productService.createOrderIntoDB(order);
+    res.status(200).json({
+      success: true,
+      message: "create order successfully",
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
+const getAllOrders = async (req: Request, res: Response) => {
+  try {
+    const result = await productService.getAllProductFromDB();
+    res.status(200).json({
+      success: true,
+      message: "Retrieved all orders successfully",
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const productController = {
   createProduct,
@@ -102,4 +127,6 @@ export const productController = {
   updateProduct,
   deleteOneProduct,
   getProductByUsingName,
+  createOrder,
+  getAllOrders,
 };
