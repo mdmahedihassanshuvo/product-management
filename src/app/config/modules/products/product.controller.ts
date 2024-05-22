@@ -1,17 +1,38 @@
 import { Request, Response } from "express";
 import { productService } from "./product.service";
+import productJoiSchema, { joiValidationSchema } from "./product.joiValidation";
 
 const createProduct = async (req: Request, res: Response) => {
   try {
     const product = req.body;
-    const result = await productService.createProductIntoDB(product);
+    // console.log(product);
+
+    // create a schema validation with joi
+    const { error, value } =
+      joiValidationSchema.productJoiSchema.validate(product);
+
+    const result = await productService.createProductIntoDB(value);
+
+    // Joi error
+    if (error) {
+      res.status(500).json({
+        success: false,
+        message: "something went wrong",
+        error: error.details,
+      });
+    }
+
     res.status(200).json({
       success: true,
       message: "create product successfully",
       data: result,
     });
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to create product",
+      error: error.message,
+    });
   }
 };
 
@@ -79,7 +100,6 @@ const deleteOneProduct = async (req: Request, res: Response) => {
 const getProductByUsingName = async (req: Request, res: Response) => {
   try {
     const searchTerm = req?.query?.searchTerm as string;
-    console.log(searchTerm);
     const result = await productService.getProductsByUsingNameIntoDB(
       searchTerm
     );
@@ -88,22 +108,41 @@ const getProductByUsingName = async (req: Request, res: Response) => {
       message: "Retrieved all product successfully",
       data: result,
     });
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    res.status(5000).json({
+      success: false,
+      error: error.message,
+    });
   }
 };
 
 const createOrder = async (req: Request, res: Response) => {
   try {
     const order = req.body;
-    const result = await productService.createOrderIntoDB(order);
+    // create a schema validation with joi
+    const { error, value } = joiValidationSchema.orderJoiSchema.validate(order);
+    const result = await productService.createOrderIntoDB(value);
+
+    // Joi error
+    if (error) {
+      console.log(error); // Log the error object to see its contents
+      res.status(500).json({
+        success: false,
+        message: "Something went wrong",
+        error: error.details,
+      });
+    }
+    
     res.status(200).json({
       success: true,
       message: "create order successfully",
       data: result,
     });
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
   }
 };
 
@@ -115,22 +154,28 @@ const getAllOrders = async (req: Request, res: Response) => {
       message: "Retrieved all orders successfully",
       data: result,
     });
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    res.status(5000).json({
+      success: false,
+      error: error.message,
+    });
   }
 };
 
 const getOrderByEmail = async (req: Request, res: Response) => {
   try {
-    const email = req.query?.email;
+    const email = req.query?.email as string;
     const result = await productService.getOrderByEmailFromDB(email);
     res.status(200).json({
       success: true,
       message: "Retrieved all orders successfully",
       data: result,
     });
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    res.status(5000).json({
+      success: false,
+      error: error.message,
+    });
   }
 };
 

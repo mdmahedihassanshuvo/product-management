@@ -1,6 +1,6 @@
 import { Error } from "mongoose";
 import { Order, Product } from "./product.interface";
-import { OrderModel, ProductModel } from "./product.model";
+import { OrderModel, ProductModel } from "../product.model";
 
 const createProductIntoDB = async (productData: Product) => {
   const result = await ProductModel.create(productData);
