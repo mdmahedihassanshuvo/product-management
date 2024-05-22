@@ -27,6 +27,7 @@ const createProduct = async (req: Request, res: Response) => {
       message: "create product successfully",
       data: result,
     });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     res.status(500).json({
       success: false,
@@ -89,6 +90,7 @@ const updateProduct = async (req: Request, res: Response) => {
       message: "update product successfully",
       data: result,
     });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     res.status(500).json({
       success: false,
@@ -121,7 +123,7 @@ const createOrder = async (req: Request, res: Response) => {
 
     // Joi error
     if (error) {
-      console.log(error); // Log the error object to see its contents
+      console.log(error);
       res.status(500).json({
         success: false,
         message: "Something went wrong",
@@ -134,6 +136,7 @@ const createOrder = async (req: Request, res: Response) => {
       message: "create order successfully",
       data: result,
     });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     res.status(500).json({
       success: false,
@@ -163,6 +166,7 @@ const getAllOrders = async (req: Request, res: Response) => {
         data: result,
       });
     }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     res.status(5000).json({
       success: false,
@@ -180,6 +184,7 @@ const getOrderByEmail = async (req: Request, res: Response) => {
       message: "Retrieved all orders successfully",
       data: result,
     });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     res.status(5000).json({
       success: false,

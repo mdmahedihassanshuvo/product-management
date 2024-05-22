@@ -13,19 +13,19 @@ const getAllProductFromDB = async () => {
 };
 
 const getOneProductFromDB = async (id: string) => {
-  const result = await ProductModel.findOne({ id });
+  const result = await ProductModel.findOne({ _id: id });
   return result;
 };
 
 const updateProductFromDB = async (id: string, productData: Product) => {
-  const result = await ProductModel.findOneAndUpdate({ id }, productData, {
+  const result = await ProductModel.findOneAndUpdate({ _id: id }, productData, {
     new: true,
   });
   return result;
 };
 
 const deleteOneProductFromDB = async (id: string) => {
-  const result = await ProductModel.deleteOne({ id });
+  const result = await ProductModel.deleteOne({ _id: id });
   return result;
 };
 
@@ -37,7 +37,7 @@ const getProductsByUsingNameIntoDB = async (productName: string) => {
 };
 
 const createOrderIntoDB = async (orderData: Order) => {
-  const product = await ProductModel.findOne({ id: orderData.productId });
+  const product = await ProductModel.findOne({ _id: orderData.productId });
 
   if (!product) {
     throw new Error("Order not found");
@@ -66,6 +66,9 @@ const getAllOrdersFromDB = async () => {
 
 const getOrderByEmailFromDB = async (userEmail: string) => {
   const result = await OrderModel.find({ email: userEmail });
+  if(result.length < 0){
+    throw new Error("user not found in order data")
+  }
   return result;
 };
 
