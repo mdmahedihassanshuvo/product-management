@@ -13,7 +13,7 @@ app.use("/api", productRouter);
 
 app.get("/", (req: Request, res: Response) => {
   
-  res.send("Hello World!");
+  res.send("Welcome to my application");
 });
 
 app.all("*", (req: Request, res: Response) => {
