@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { productService } from "./product.service";
-import productJoiSchema, { joiValidationSchema } from "./product.joiValidation";
+import { joiValidationSchema } from "./product.joiValidation";
 
 const createProduct = async (req: Request, res: Response) => {
   try {
@@ -38,12 +38,27 @@ const createProduct = async (req: Request, res: Response) => {
 
 const getAllProducts = async (req: Request, res: Response) => {
   try {
-    const result = await productService.getAllProductFromDB();
-    res.status(200).json({
-      success: true,
-      message: "Retrieved all product successfully",
-      data: result,
-    });
+    const searchTerm = req?.query?.searchTerm as string;
+
+    if (searchTerm) {
+      const result = await productService.getProductsByUsingNameIntoDB(
+        searchTerm
+      );
+      res.status(200).json({
+        success: true,
+        message: "Retrieved product successfully",
+        data: result,
+      });
+    }
+
+    if (!searchTerm) {
+      const result = await productService.getAllProductFromDB();
+      res.status(200).json({
+        success: true,
+        message: "Retrieved all product successfully",
+        data: result,
+      });
+    }
   } catch (error) {
     console.log(error);
   }
@@ -97,25 +112,6 @@ const deleteOneProduct = async (req: Request, res: Response) => {
   }
 };
 
-const getProductByUsingName = async (req: Request, res: Response) => {
-  try {
-    const searchTerm = req?.query?.searchTerm as string;
-    const result = await productService.getProductsByUsingNameIntoDB(
-      searchTerm
-    );
-    res.status(200).json({
-      success: true,
-      message: "Retrieved all product successfully",
-      data: result,
-    });
-  } catch (error: any) {
-    res.status(5000).json({
-      success: false,
-      error: error.message,
-    });
-  }
-};
-
 const createOrder = async (req: Request, res: Response) => {
   try {
     const order = req.body;
@@ -132,7 +128,7 @@ const createOrder = async (req: Request, res: Response) => {
         error: error.details,
       });
     }
-    
+
     res.status(200).json({
       success: true,
       message: "create order successfully",
@@ -148,12 +144,25 @@ const createOrder = async (req: Request, res: Response) => {
 
 const getAllOrders = async (req: Request, res: Response) => {
   try {
-    const result = await productService.getAllOrdersFromDB();
-    res.status(200).json({
-      success: true,
-      message: "Retrieved all orders successfully",
-      data: result,
-    });
+    const email = req.query?.email as string;
+
+    if (email) {
+      const result = await productService.getOrderByEmailFromDB(email);
+      res.status(200).json({
+        success: true,
+        message: "Retrieved all orders successfully",
+        data: result,
+      });
+    }
+
+    if (!email) {
+      const result = await productService.getAllOrdersFromDB();
+      res.status(200).json({
+        success: true,
+        message: "Retrieved all orders successfully",
+        data: result,
+      });
+    }
   } catch (error: any) {
     res.status(5000).json({
       success: false,
@@ -185,7 +194,6 @@ export const productController = {
   getOneProductFromDB,
   updateProduct,
   deleteOneProduct,
-  getProductByUsingName,
   createOrder,
   getAllOrders,
   getOrderByEmail,

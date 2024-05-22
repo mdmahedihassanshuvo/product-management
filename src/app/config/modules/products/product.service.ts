@@ -40,7 +40,7 @@ const createOrderIntoDB = async (orderData: Order) => {
   const product = await ProductModel.findOne({ id: orderData.productId });
 
   if (!product) {
-    throw new Error("product not found");
+    throw new Error("Order not found");
   }
 
   if (product.inventory.quantity < orderData.quantity) {
